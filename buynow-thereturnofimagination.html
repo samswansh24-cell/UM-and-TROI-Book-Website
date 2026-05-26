@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Buy — The Return of Imagination · Reyansh Sethi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --night:#080b14;
+  --deep:#0d1224;
+  --violet:#6c5ce7;
+  --gold:#f0c060;
+  --sky:#7eb8f7;
+  --teal:#00cec9;
+  --text:#e8e4f0;
+  --muted:rgba(232,228,240,0.5);
+  --mist:rgba(255,255,255,0.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--night);color:var(--text);
+  font-family:'Outfit',sans-serif;overflow-x:hidden;line-height:1.6;
+  min-height:100vh;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%,rgba(255,255,255,.55) 0%,transparent 100%),
+    radial-gradient(1px 1px at 28% 65%,rgba(255,255,255,.35) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 44% 32%,rgba(255,255,255,.65) 0%,transparent 100%),
+    radial-gradient(1px 1px at 60% 82%,rgba(255,255,255,.3) 0%,transparent 100%),
+    radial-gradient(1px 1px at 75% 14%,rgba(255,255,255,.5) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 86% 55%,rgba(255,255,255,.55) 0%,transparent 100%),
+    radial-gradient(1px 1px at 93% 76%,rgba(255,255,255,.4) 0%,transparent 100%),
+    radial-gradient(1px 1px at 20% 91%,rgba(255,255,255,.45) 0%,transparent 100%);
+}
+.blob{position:fixed;border-radius:50%;filter:blur(90px);opacity:.1;pointer-events:none;z-index:0;}
+.blob-1{width:500px;height:500px;background:#0e6b6b;top:-80px;left:-120px;animation:drift 18s ease-in-out infinite alternate;}
+.blob-2{width:400px;height:400px;background:#1a4a8a;bottom:-80px;right:-80px;animation:drift 22s ease-in-out infinite alternate-reverse;}
+.blob-3{width:250px;height:250px;background:var(--gold);top:50%;left:55%;animation:pulse 8s ease-in-out infinite;}
+.blob-4{width:300px;height:300px;background:var(--violet);top:30%;right:10%;animation:drift 15s ease-in-out infinite;opacity:.07;}
+@keyframes drift{from{transform:translate(0,0);}to{transform:translate(40px,30px);}}
+@keyframes pulse{0%,100%{opacity:.06;transform:scale(1);}50%{opacity:.12;transform:scale(1.2);}}
+
+/* NAV */
+nav{
+  position:fixed;top:0;width:100%;z-index:100;
+  padding:20px 7%;display:flex;justify-content:space-between;align-items:center;
+  background:rgba(8,11,20,0.75);backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(0,206,201,0.12);
+}
+.nav-brand{
+  font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;
+  letter-spacing:2px;color:var(--text);text-decoration:none;
+}
+.nav-brand span{color:var(--gold);font-style:italic;}
+.nav-back{
+  font-size:12px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;transition:.25s;
+  display:flex;align-items:center;gap:8px;
+}
+.nav-back:hover{color:var(--teal);}
+.nav-back::before{content:'←';}
+
+/* BADGE — SEQUEL */
+.sequel-banner{
+  position:relative;z-index:1;
+  background:linear-gradient(135deg,rgba(0,206,201,.1),rgba(108,92,231,.1));
+  border-bottom:1px solid rgba(0,206,201,.15);
+  padding:12px 7%;display:flex;align-items:center;justify-content:center;gap:12px;
+  margin-top:64px;
+}
+.sequel-text{
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);
+}
+.sequel-dot{width:4px;height:4px;border-radius:50%;background:var(--teal);}
+
+/* PAGE LAYOUT */
+.page{
+  min-height:calc(100vh - 104px);padding:60px 7% 80px;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:start;position:relative;z-index:1;
+  max-width:1200px;margin:0 auto;
+}
+
+/* LEFT — BOOK DISPLAY */
+.book-display{position:sticky;top:130px;}
+.book-stage{
+  perspective:1000px;width:100%;
+  display:flex;justify-content:center;margin-bottom:40px;
+  position:relative;
+}
+
+/* Dual book stack effect */
+.book-stack{position:relative;width:220px;height:340px;}
+.book-shadow{
+  position:absolute;
+  width:200px;height:310px;
+  background:linear-gradient(160deg,#112230,#081218);
+  border-radius:2px 10px 10px 2px;
+  top:16px;left:16px;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+}
+.book-3d-full{
+  width:220px;height:320px;
+  transform-style:preserve-3d;
+  animation:bookFloat 6s ease-in-out infinite;
+  transform:rotateY(-20deg) rotateX(5deg);
+  transition:transform .8s cubic-bezier(.4,0,.2,1);
+  cursor:pointer;position:relative;z-index:1;
+}
+.book-3d-full:hover{transform:rotateY(0deg) rotateX(0deg);animation:none;}
+@keyframes bookFloat{
+  0%,100%{transform:rotateY(-20deg) rotateX(5deg) translateY(0);}
+  50%{transform:rotateY(-20deg) rotateX(5deg) translateY(-12px);}
+}
+.b-face{
+  width:220px;height:320px;
+  background:linear-gradient(160deg,#142030,#081018);
+  border-radius:2px 10px 10px 2px;overflow:hidden;
+  box-shadow:12px 0 40px rgba(0,0,0,.7);
+}
+.b-face img{width:100%;height:100%;object-fit:cover;border-radius:2px 10px 10px 2px;}
+.b-face-glow{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(0,206,201,.1),transparent 60%);
+  border-radius:2px 10px 10px 2px;pointer-events:none;
+}
+.b-spine{
+  position:absolute;width:40px;height:320px;left:-40px;top:0;
+  background:linear-gradient(to right,#030608,#081018);
+  border-radius:10px 0 0 10px;
+  display:flex;align-items:center;justify-content:center;
+}
+.b-spine-text{
+  writing-mode:vertical-rl;transform:rotate(180deg);
+  font-family:'Cormorant Garamond',serif;font-size:11px;
+  letter-spacing:3px;color:rgba(0,206,201,.45);
+}
+
+/* GLOW RING */
+.book-glow{
+  position:absolute;inset:-20px;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(0,206,201,.06) 0%,transparent 70%);
+  pointer-events:none;animation:pulse 5s ease-in-out infinite;
+}
+
+.book-meta{text-align:center;}
+.book-meta-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--teal);margin-bottom:16px;
+}
+.book-meta-badge::before,.book-meta-badge::after{content:'◆';font-size:7px;}
+.book-meta-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:30px;font-weight:600;line-height:1.15;margin-bottom:8px;
+}
+.book-meta-title em{font-style:italic;color:var(--gold);}
+.book-meta-author{font-size:13px;color:var(--muted);letter-spacing:2px;margin-bottom:20px;}
+.book-stars{color:var(--gold);font-size:14px;letter-spacing:4px;margin-bottom:6px;}
+.book-reviews-count{font-size:11px;color:var(--muted);letter-spacing:1px;}
+.book-tags{
+  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;
+}
+.book-tag{
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  border:1px solid rgba(0,206,201,.3);
+  padding:5px 14px;border-radius:20px;color:var(--teal);
+}
+
+/* Also read */
+.also-read{
+  margin-top:28px;
+  background:var(--mist);border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;padding:16px 18px;
+  display:flex;align-items:center;gap:14px;text-decoration:none;transition:.25s;
+}
+.also-read:hover{border-color:rgba(108,92,231,.3);background:rgba(108,92,231,.07);}
+.also-read-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.also-read-title{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--text);}
+.also-read-arrow{margin-left:auto;color:var(--violet);font-size:18px;}
+
+/* RIGHT — PURCHASE PANEL */
+.purchase-panel{padding-top:8px;}
+.section-eyebrow{
+  display:flex;align-items:center;gap:10px;
+  font-size:9px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--teal);margin-bottom:20px;
+}
+.section-eyebrow::before{content:'';width:20px;height:1px;background:var(--teal);}
+
+.panel-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(28px,3vw,44px);font-weight:300;
+  line-height:1.1;margin-bottom:6px;
+}
+.panel-title em{font-style:italic;color:var(--gold);}
+.sequel-label{
+  display:inline-block;
+  background:rgba(0,206,201,.12);border:1px solid rgba(0,206,201,.25);
+  color:var(--teal);font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  padding:4px 12px;border-radius:20px;margin-bottom:14px;
+}
+.panel-subtitle{font-size:14px;color:var(--muted);margin-bottom:32px;line-height:1.7;}
+
+/* FORMAT */
+.format-label{
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:12px;display:block;
+}
+.format-options{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap;}
+.format-btn{
+  flex:1;min-width:100px;padding:14px 16px;
+  background:var(--mist);border:1px solid rgba(255,255,255,.08);
+  border-radius:8px;cursor:pointer;transition:.25s;text-align:center;
+  font-family:'Outfit',sans-serif;
+}
+.format-btn:hover{border-color:rgba(0,206,201,.35);background:rgba(0,206,201,.06);}
+.format-btn.active{border-color:var(--teal);background:rgba(0,206,201,.1);}
+.format-btn-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px;}
+.format-btn-price{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--gold);}
+.format-btn-note{font-size:10px;color:var(--muted);margin-top:2px;}
+
+/* QUANTITY */
+.qty-row{display:flex;align-items:center;gap:16px;margin-bottom:28px;}
+.qty-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);}
+.qty-control{display:flex;align-items:center;}
+.qty-btn{
+  width:36px;height:36px;background:var(--mist);
+  border:1px solid rgba(255,255,255,.08);
+  color:var(--text);font-size:18px;cursor:pointer;transition:.2s;
+  font-family:'Outfit',sans-serif;
+}
+.qty-btn:first-child{border-radius:6px 0 0 6px;}
+.qty-btn:last-child{border-radius:0 6px 6px 0;}
+.qty-btn:hover{background:rgba(0,206,201,.15);border-color:var(--teal);}
+.qty-num{
+  width:48px;height:36px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);border-left:none;border-right:none;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:500;
+}
+
+/* TOTAL */
+.total-box{
+  background:linear-gradient(135deg,rgba(0,206,201,.08),rgba(26,42,108,.12));
+  border:1px solid rgba(0,206,201,.18);
+  border-radius:10px;padding:20px 24px;
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:20px;
+}
+.total-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.total-amount{
+  font-family:'Cormorant Garamond',serif;
+  font-size:36px;font-weight:700;color:var(--gold);
+}
+
+/* ACTIONS */
+.buy-actions{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.btn-buy{
+  width:100%;padding:16px;border:none;border-radius:6px;
+  font-family:'Outfit',sans-serif;font-size:12px;
+  letter-spacing:3px;text-transform:uppercase;font-weight:600;
+  cursor:pointer;transition:.3s;position:relative;overflow:hidden;
+}
+.btn-buy.primary{
+  background:linear-gradient(135deg,#0e8a88,#00cec9);color:var(--night);
+}
+.btn-buy.primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,206,201,.3);}
+.btn-buy.secondary{
+  background:transparent;color:var(--gold);
+  border:1px solid rgba(240,192,96,.35);
+}
+.btn-buy.secondary:hover{background:rgba(240,192,96,.08);border-color:var(--gold);}
+.or-divider{
+  display:flex;align-items:center;gap:12px;margin:4px 0;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.2);
+}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.06);}
+
+/* TRUST */
+.trust-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px;}
+.trust-item{
+  background:var(--mist);border:1px solid rgba(255,255,255,.05);
+  border-radius:8px;padding:14px 10px;text-align:center;
+}
+.trust-icon{font-size:20px;margin-bottom:6px;}
+.trust-text{font-size:10px;letter-spacing:1px;color:var(--muted);line-height:1.4;}
+
+/* DESC */
+.desc-box{
+  background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);
+  border-radius:10px;padding:24px;margin-bottom:20px;
+}
+.desc-title{
+  font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.desc-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.07);}
+.desc-text{font-size:14px;line-height:1.85;color:var(--muted);}
+.details-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+.details-list li{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);}
+.details-list li::before{content:'✦';color:var(--teal);font-size:8px;flex-shrink:0;}
+
+/* SUCCESS */
+.success-overlay{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(8,11,20,.95);backdrop-filter:blur(20px);
+  flex-direction:column;align-items:center;justify-content:center;text-align:center;
+}
+.success-overlay.show{display:flex;}
+.success-icon{
+  width:80px;height:80px;border-radius:50%;
+  background:rgba(0,206,201,.12);border:1px solid rgba(0,206,201,.35);
+  display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:28px;
+  animation:popIn .5s cubic-bezier(.4,0,.2,1);
+}
+@keyframes popIn{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;margin-bottom:12px;}
+.success-title em{font-style:italic;color:var(--gold);}
+.success-sub{font-size:15px;color:var(--muted);max-width:420px;margin-bottom:36px;line-height:1.7;}
+.success-btn{
+  padding:14px 40px;background:linear-gradient(135deg,#0e8a88,#00cec9);
+  border:none;color:var(--night);border-radius:4px;
+  font-family:'Outfit',sans-serif;font-size:12px;letter-spacing:3px;
+  text-transform:uppercase;font-weight:700;cursor:pointer;
+  text-decoration:none;display:inline-block;
+}
+
+/* FOOTER */
+.page-footer{
+  text-align:center;padding:40px 7% 30px;position:relative;z-index:1;
+  border-top:1px solid rgba(255,255,255,.04);
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.18);
+}
+
+@media(max-width:860px){
+  .page{grid-template-columns:1fr;gap:40px;}
+  .book-display{position:static;}
+}
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+<div class="blob blob-4"></div>
+
+<nav>
+  <a href="reyansh.html" class="nav-brand">Reyansh <span>Sethi</span></a>
+  <a href="reyansh.html" class="nav-back">Back to Author Page</a>
+</nav>
+
+<div class="sequel-banner">
+  <div class="sequel-dot"></div>
+  <div class="sequel-text">Book Two — The Sequel to Unlock Imagination</div>
+  <div class="sequel-dot"></div>
+</div>
+
+<div class="page">
+
+  <!-- LEFT -->
+  <div class="book-display">
+    <div class="book-stage">
+      <div class="book-glow"></div>
+      <div class="book-stack">
+        <div class="book-shadow"></div>
+        <div class="book-3d-full" title="Hover to explore">
+          <div class="b-face">
+            <img src="The Return of Imagination.png" alt="The Return of Imagination"/>
+            <div class="b-face-glow"></div>
+          </div>
+          <div class="b-spine">
+            <div class="b-spine-text">The Return of Imagination · Reyansh Sethi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="book-meta">
+      <div class="book-meta-badge">Book Two</div>
+      <div class="book-meta-title">The Return of<br/><em>Imagination</em></div>
+      <div class="book-meta-author">by Reyansh Sethi</div>
+      <div class="book-stars">★ ★ ★ ★ ★</div>
+      <div class="book-reviews-count">5.0 · Readers' Choice</div>
+      <div class="book-tags">
+        <span class="book-tag">Sequel</span>
+        <span class="book-tag">Wonder</span>
+        <span class="book-tag">Middle Grade</span>
+        <span class="book-tag">2025</span>
+      </div>
+    </div>
+
+    <a href="buynow-unlockimagination.html" class="also-read">
+      <div>
+        <div class="also-read-label">Read First</div>
+        <div class="also-read-title">Unlock Imagination — Book One</div>
+      </div>
+      <div class="also-read-arrow">→</div>
+    </a>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="purchase-panel">
+    <div class="section-eyebrow">Get Your Copy</div>
+    <div class="sequel-label">✦ The Sequel</div>
+    <div class="panel-title">The Return of<br/><em>Imagination</em></div>
+    <p class="panel-subtitle">The sequel that rekindles wonder — continuing the saga of ideas turned real and the breathtaking adventures they spark. Bigger, bolder, more imaginative than ever.</p>
+
+    <span class="format-label">Choose Format</span>
+    <div class="format-options">
+      <div class="format-btn active" onclick="selectFormat(this,'Paperback','₹349')">
+        <div class="format-btn-name">Paperback</div>
+        <div class="format-btn-price">₹349</div>
+        <div class="format-btn-note">Ships in 3–5 days</div>
+      </div>
+      <div class="format-btn" onclick="selectFormat(this,'Hardcover','₹499')">
+        <div class="format-btn-name">Hardcover</div>
+        <div class="format-btn-price">₹499</div>
+        <div class="format-btn-note">Premium edition</div>
+      </div>
+      <div class="format-btn" onclick="selectFormat(this,'eBook','₹179')">
+        <div class="format-btn-name">eBook</div>
+        <div class="format-btn-price">₹179</div>
+        <div class="format-btn-note">Instant download</div>
+      </div>
+    </div>
+
+    <div class="qty-row">
+      <span class="qty-label">Quantity</span>
+      <div class="qty-control">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <div class="qty-num" id="qtyNum">1</div>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+      </div>
+    </div>
+
+    <div class="total-box">
+      <div>
+        <div class="total-label">Order Total</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;" id="totalBreakdown">1 × Paperback</div>
+      </div>
+      <div class="total-amount" id="totalAmount">₹349</div>
+    </div>
+
+    <div class="buy-actions">
+      <button class="btn-buy primary" onclick="showSuccess()">✦ Buy Now</button>
+      <div class="or-divider">or</div>
+      <a href="https://www.bribooks.com/bookpreview/the-return-of-imagination-by-reyansh-sethi/" target="_blank" class="btn-buy secondary" style="text-align:center;text-decoration:none;display:block;line-height:1;padding:16px;">Read Free Sample First</a>
+    </div>
+
+    <div class="trust-row">
+      <div class="trust-item">
+        <div class="trust-icon">🔒</div>
+        <div class="trust-text">Secure Checkout</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">↩</div>
+        <div class="trust-text">Easy Returns</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">✦</div>
+        <div class="trust-text">Authentic Copy</div>
+      </div>
+    </div>
+
+    <div class="desc-box">
+      <div class="desc-title">About This Book</div>
+      <div class="desc-text">The much-anticipated sequel to Unlock Imagination. Reyansh Sethi returns with a story that expands the world readers fell in love with — bolder ideas, higher stakes, and the same infectious sense of wonder that made the first book a hit.</div>
+      <ul class="details-list">
+        <li>Published 2025 · BriBooks</li>
+        <li>Written by a Class VII student, age 12</li>
+        <li>Sequel to Unlock Imagination (2024)</li>
+        <li>Perfect for readers aged 8–14</li>
+        <li>Ships across India</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-icon">✦</div>
+  <div class="success-title">Order <em>Placed!</em></div>
+  <p class="success-sub">Thank you for supporting Reyansh's journey. Your copy of <strong>The Return of Imagination</strong> is on its way to you.</p>
+  <a href="reyansh.html" class="success-btn">Back to Author Page</a>
+</div>
+
+<div class="page-footer">© 2026 Reyansh Sethi · All rights reserved.</div>
+
+<script>
+let qty = 1, price = 349, format = 'Paperback';
+
+function selectFormat(el, name, priceStr) {
+  document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  format = name;
+  price = parseInt(priceStr.replace('₹',''));
+  updateTotal();
+}
+function changeQty(d) {
+  qty = Math.max(1, qty + d);
+  document.getElementById('qtyNum').textContent = qty;
+  updateTotal();
+}
+function updateTotal() {
+  document.getElementById('totalAmount').textContent = '₹' + (qty * price).toLocaleString('en-IN');
+  document.getElementById('totalBreakdown').textContent = qty + ' × ' + format;
+}
+function showSuccess() {
+  document.getElementById('successOverlay').classList.add('show');
+}
+
+const book = document.querySelector('.book-3d-full');
+let isHovered = false;
+book.addEventListener('mouseenter', () => { isHovered = true; book.style.animation = 'none'; });
+book.addEventListener('mouseleave', () => {
+  isHovered = false;
+  book.style.animation = 'bookFloat 6s ease-in-out infinite';
+  book.style.transform = '';
+});
+book.addEventListener('mousemove', e => {
+  if (!isHovered) return;
+  const r = book.getBoundingClientRect();
+  const x = ((e.clientX - r.left) / r.width - .5) * 30;
+  const y = ((e.clientY - r.top) / r.height - .5) * -20;
+  book.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+});
+
+document.addEventListener('mousemove', e => {
+  const x = (e.clientX / window.innerWidth - .5) * 25;
+  const y = (e.clientY / window.innerHeight - .5) * 25;
+  document.querySelector('.blob-1').style.transform = `translate(${x*.5}px,${y*.5}px)`;
+  document.querySelector('.blob-2').style.transform = `translate(${-x*.35}px,${-y*.35}px)`;
+});
+</script>
+</body>
+</html>
